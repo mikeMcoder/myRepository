@@ -1,0 +1,257 @@
+'''
+NeoPhotonics CONFIDENTIAL
+Copyright 2003-2015 NeoPhotonics Corporation All Rights Reserved.
+
+The source code contained or described herein and all documents related to
+the source code ("Material") are owned by NeoPhotonics Corporation or its
+suppliers or licensors. Title to the Material remains with NeoPhotonics Corporation
+or its suppliers and licensors. The Material may contain trade secrets and
+proprietary and confidential information of NeoPhotonics Corporation and its
+suppliers and licensors, and is protected by worldwide copyright and trade
+secret laws and treaty provisions. No part of the Material may be used, copied,
+reproduced, modified, published, uploaded, posted, transmitted, distributed,
+or disclosed in any way without NeoPhotonics's prior express written permission. 
+No license under any patent, copyright, trade secret or other intellectual
+property right is granted to or conferred upon you by disclosure or delivery
+of the Materials, either expressly, by implication, inducement, estoppel or
+otherwise. Any license under such intellectual property rights must be express
+and approved by NeoPhotonics in writing.
+
+Include any supplier copyright notices as supplier requires NeoPhotonics to use.
+
+Include supplier trademarks or logos as supplier requires NeoPhotonics to use,
+preceded by an asterisk. An asterisked footnote can be added as follows:
+*Third Party trademarks are the property of their respective owners.
+
+Unless otherwise agreed by NeoPhotonics in writing, you may not remove or alter this
+notice or any other notice embedded in Materials by NeoPhotonics or NeoPhotonics's
+suppliers or licensors in any way.
+
+    $Source: /data/development/cvs/Sundial2/Python/TTX/Ray.py,v $
+    $Revision: 1.1 $
+    $Date: 2007/04/18 19:45:25 $
+    $Name: Sundial2_01_03_00_01 $
+    
+'''
+
+import string
+import struct
+
+import CRC16
+
+DEBUG_RAY = 0
+def DebugOut(s):
+    if DEBUG_RAY:
+        print s
+
+class Filter:
+
+    # Create the output buffer from the input buffer.
+    TOKEN_START   = chr(0)
+    TOKEN_STOP    = chr(1)
+    TOKEN_VERSION = chr(2)
+    TOKEN_ADDRESS = chr(3)
+    TOKEN_DATA    = chr(4)
+    TOKEN_CRC     = chr(5)
+
+    def __init__(self):
+        DebugOut('Filter.__init__()')
+        
+        self.__address = 0
+        self.__buffer = None
+        self.__crc = 0 
+        self.__version = (0, 0, 0, 'X')
+
+    def __crc__(self, c = None):
+        DebugOut('Filter.__crc__(%s)' % (c))
+
+        if (c == None): return(self.__crc)
+
+        self.__crc = c
+		
+    def __repr__(self):
+        s = ''
+        s += 'Address: 0x%08X\n' % (self.address())
+        s += 'CRC    : 0x%04X\n' % (self.__crc__())
+        s += 'Version: Major: %d Minor: %d Bug: %d' % (self.version())
+
+        DebugOut('Filter.__repr__ = %s' % (s))
+        return(s)
+
+    def address(self, a = None):
+        DebugOut('Filter.address(%s)' % (a))
+
+        if (a == None): return(self.__address)
+
+        self.__address = a
+
+
+    def buffer(self, b = None):
+        DebugOut('Filter.buffer(b)')
+        
+        '''The input buffer must be a series of bytes as string.
+        The output buffer is the filtered content in the Ray format.
+        '''
+
+        if (b != None):
+            # Set the input buffer.
+            self.__buffer = b
+            return
+
+
+        text = []
+
+        # Start record.
+        DebugOut('Filter.TOKEN_START')
+        text.append(Filter.TOKEN_START)
+        text.append(chr(0))
+
+        # CRC record. Write the 16-bit value with a big-endian bias.
+        DebugOut('Filter.TOKEN_CRC')
+        text.append(Filter.TOKEN_CRC)
+        text.append(chr(2))
+        text.append(struct.pack('>H', self.__crc__()))
+
+        # Version record.
+        # Write token, record size, three bytes of version (major, minor,
+        # bug, type). 
+        DebugOut('Filter.TOKEN_VERSION')
+        text.append(Filter.TOKEN_VERSION)
+        text.append(chr(4))
+        text.append(''.join(map(chr, self.version())))
+
+        address = self.address() 
+        DebugOut('start address = %s' % (address))
+
+        buffer = self.__buffer
+
+        # One less than the maximum size to make even
+        CHUNK_SIZE = 254
+
+        for i in range(0, len(buffer), CHUNK_SIZE):
+
+            chunk = buffer[i : i + CHUNK_SIZE]
+
+            # Address record.
+            DebugOut('Filter.TOKEN_ADDRESS = %s' % (address))
+            text.append(Filter.TOKEN_ADDRESS)
+            text.append(chr(4))
+            # Write 4 bytes of 32-bit address in big-endian.
+            text.append(struct.pack('>I', address))
+
+            # Data record.
+            DebugOut('Filter.TOKEN_DATA')
+            text.append(Filter.TOKEN_DATA)
+            text.append(chr(len(chunk)))
+            text.append(chunk)
+
+            address += CHUNK_SIZE
+
+        # Stop record.
+        DebugOut('Filter.TOKEN_STOP')
+        text.append(Filter.TOKEN_STOP)
+        text.append(chr(0))
+
+        data = string.join(text, '')
+        DebugOut( 'Filter.buffer output:' )
+        #DebugOut( data )
+        return data
+
+    ##  NOT CALLED
+    def text(self, buffer):
+        DebugOut('Filter.text()')
+        'Convert ray buffer into text (address, data_byte)'
+        text = []
+        i = 0
+        address = 0
+        while 1:
+            token, length = buffer[i : i + 2]
+            length = struct.unpack('B', length)[0]
+            if token == Filter.TOKEN_DATA:
+                i += 2
+                for n in range(length):
+                    data = struct.unpack('B', buffer[i + n])[0]
+                    text.append('%08x %02x' % (address, data))
+                    address += 1
+                i += length
+            elif token == Filter.TOKEN_START or \
+               token == Filter.TOKEN_CRC or \
+               token == Filter.TOKEN_VERSION:
+                i += (2 + length)
+            elif token == Filter.TOKEN_ADDRESS:
+                i += 2
+                address = struct.unpack('>I', buffer[i : i + length])[0]
+                #DebugOut( 'address %08x' % address )
+                i += length
+            elif token == Filter.TOKEN_STOP:
+                break
+            else:
+                raise 'Invalid token'
+            
+        strText = string.join(text, '\n')
+
+        DebugOut( 'Filter.text output:' )
+        #DebugOut( strText )
+        
+        return strText
+    
+    def version(self, v = None):
+        DebugOut( 'Filter.version()' )
+        
+        '''Version is a tuple: (major, minor, bug, type).'''
+
+        if (v == None): return(self.__version)
+
+        DebugOut( 'Filter.version(%s)' % (str(v)) )
+        self.__version = v
+
+class ApplicationFilter(Filter):
+
+    def __init__(self):
+        DebugOut( 'ApplicationFilter.__init__()' )
+        Filter.__init__(self)
+
+    def buffer(self, b = None):
+        DebugOut( 'ApplicationFilter.buffer(b)' )
+        if (b != None):
+        
+            INPUT_BUFFER_SIZE = 64 * 1024   # match CODE_SPACE_SIZE
+
+            # Set input buffer.
+            assert len(b) == INPUT_BUFFER_SIZE
+
+            # Compute the CRC.
+            DICTIONARY_ADDRESS = 0x0400
+            DICTIONARY_SIZE = 1024
+
+            # Create a temporary buffer that skips over the dictionary. 
+            crc_buffer = b[0 : DICTIONARY_ADDRESS]
+            crc_buffer += b[DICTIONARY_ADDRESS + DICTIONARY_SIZE : ] 
+
+            assert len(crc_buffer) == INPUT_BUFFER_SIZE - DICTIONARY_SIZE 
+
+            DebugOut( 'len(crc_buffer) = %s' % (len(crc_buffer)) )
+            #for i in range(len(crc_buffer)):
+            #    DebugOut( 'crc_buffer[%d] = %s' % (i, str(crc_buffer[i]) ))
+
+            DebugOut( 'len(b) = %s' % (len(b)) )
+            #for i in range(len(crc_buffer)):
+            #    DebugOut( 'b[%d] = %s' % (i, str(b[i]) ))
+
+            # Create the format string for struct.unpack(): Number of 16-bit
+            # words to convert.
+            format = '>%dH' % (len(crc_buffer) / 2)
+
+            # Convert string to big-endian 16-bit integers.
+            words = struct.unpack(format, crc_buffer)
+
+            # Compute and set the CRC.
+            DebugOut( 'Compute and set the CRC.' )
+            Filter.__crc__(self, reduce(CRC16.nextWord, words, 0))
+
+            # Pass the complete buffer to the base class.
+            Filter.buffer(self, b)
+    
+            return
+
+        return(Filter.buffer(self))
