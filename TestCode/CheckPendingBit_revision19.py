@@ -891,7 +891,7 @@ class PendingBitTest:
 
     def runpendingtestCase14(self):
     
-        ''' while laser off, set to channel, turn on laser, monitor nop after 5 sec trigger master reset'''
+        ''' while laser off, set to channel, turn on laser, monitor nop after 5 sec trigger main reset'''
         self.it.connect(_PORT,_BAUD)       #connect
         self.it.logging(True)
         self.it.logfile(self.logfilename14)  #enable logging
@@ -935,9 +935,9 @@ class PendingBitTest:
                     self.lapseTime = time.time() -  self.startTime  #keep counting time
                     print(self.lapseTime, self.pending, self.lf, self.oop, self.ftf, self.statusF, self.statusW, self.tunerstate) #print these parameters
                     
-                    if self.lapseTime >= 5.0: #After 5 secs,trigger master reset
-                        print("==>Trigger master Reset...")
-                        self.it.resena(mr = 1) # trigger master reset
+                    if self.lapseTime >= 5.0: #After 5 secs,trigger main reset
+                        print("==>Trigger main Reset...")
+                        self.it.resena(mr = 1) # trigger main reset
                         #time.sleep(3)
                         for rep in range(5): #print 5 times
                             self.it.setpassword()

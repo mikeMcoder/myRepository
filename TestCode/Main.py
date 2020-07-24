@@ -35,7 +35,7 @@ elif (HUAWEI == 1) or (GENERIC == 1) or (BASIC== 1) or (FW_UPGRADE == 1):
     import RandomFtfTestSuite as RFTFTS
     import ReadOnlyRegisterTestSuite as RORTS
     import EchoResetTestRelease as ERTR
-    import MasterResetTestRelease as MRTR
+    import MainResetTestRelease as MRTR
     import SoftResetTestRelease as SRTR
     import PowerCycleTestRelease as PCTR
     import HwSoftResetTestRelease as HWSRTR
@@ -94,7 +94,7 @@ if __name__ == '__main__':
             SCTS.SanityCheck().laserDisabletest(g)
             SCTS.SanityCheck().moduleSelecttest(g)
             SCTS.SanityCheck().hardResettest(g)
-            SCTS.SanityCheck().masterResettest()
+            SCTS.SanityCheck().mainResettest()
             SCTS.SanityCheck().softResettest()
             SCTS.SanityCheck().adtTest()
             SCTS.SanityCheck().genConfigtest()
@@ -168,7 +168,7 @@ if __name__ == '__main__':
             raise      
             
         try:
-            mrtr = MRTR.MasterResetTest()
+            mrtr = MRTR.MainResetTest()
             mrtr.runTest()#run ECHO Reset Test
         except:
             raise
@@ -270,8 +270,8 @@ if __name__ == '__main__':
 
 
         try:
-            mrtr = MRTR.MasterResetTest()
-            mrtr.runTest()#run Master Reset Test
+            mrtr = MRTR.MainResetTest()
+            mrtr.runTest()#run Main Reset Test
         except:
             raise                        
             

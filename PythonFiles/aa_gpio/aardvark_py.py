@@ -544,9 +544,9 @@ AA_I2C_NO_STOP           = 0x04
 AA_I2C_SIZED_READ        = 0x10
 AA_I2C_SIZED_READ_EXTRA1 = 0x20
 
-# Read a stream of bytes from the I2C slave device.
-def aa_i2c_read (aardvark, slave_addr, flags, data_in):
-    """usage: (int return, u08[] data_in) = aa_i2c_read(Aardvark aardvark, u16 slave_addr, AardvarkI2cFlags flags, u08[] data_in)
+# Read a stream of bytes from the I2C subordinate device.
+def aa_i2c_read (aardvark, subordinate_addr, flags, data_in):
+    """usage: (int return, u08[] data_in) = aa_i2c_read(Aardvark aardvark, u16 subordinate_addr, AardvarkI2cFlags flags, u08[] data_in)
 
     All arrays can be passed into the API as an ArrayType object or as
     a tuple (array, length), where array is an ArrayType object and
@@ -572,7 +572,7 @@ def aa_i2c_read (aardvark, slave_addr, flags, data_in):
         if data_in.typecode != 'B':
             raise TypeError("type for 'data_in' must be array('B')")
     # Call API function
-    (_ret_) = api.py_aa_i2c_read(aardvark, slave_addr, flags, num_bytes, data_in)
+    (_ret_) = api.py_aa_i2c_read(aardvark, subordinate_addr, flags, num_bytes, data_in)
     # data_in post-processing
     if __data_in: del data_in[max(0, min(_ret_, len(data_in))):]
     return (_ret_, data_in)
@@ -588,12 +588,12 @@ AA_I2C_STATUS_ARB_LOST      = 5
 AA_I2C_STATUS_BUS_LOCKED    = 6
 AA_I2C_STATUS_LAST_DATA_ACK = 7
 
-# Read a stream of bytes from the I2C slave device.
+# Read a stream of bytes from the I2C subordinate device.
 # This API function returns the number of bytes read into
 # the num_read variable.  The return value of the function
 # is a status code.
-def aa_i2c_read_ext (aardvark, slave_addr, flags, data_in):
-    """usage: (int return, u08[] data_in, u16 num_read) = aa_i2c_read_ext(Aardvark aardvark, u16 slave_addr, AardvarkI2cFlags flags, u08[] data_in)
+def aa_i2c_read_ext (aardvark, subordinate_addr, flags, data_in):
+    """usage: (int return, u08[] data_in, u16 num_read) = aa_i2c_read_ext(Aardvark aardvark, u16 subordinate_addr, AardvarkI2cFlags flags, u08[] data_in)
 
     All arrays can be passed into the API as an ArrayType object or as
     a tuple (array, length), where array is an ArrayType object and
@@ -619,15 +619,15 @@ def aa_i2c_read_ext (aardvark, slave_addr, flags, data_in):
         if data_in.typecode != 'B':
             raise TypeError("type for 'data_in' must be array('B')")
     # Call API function
-    (_ret_, num_read) = api.py_aa_i2c_read_ext(aardvark, slave_addr, flags, num_bytes, data_in)
+    (_ret_, num_read) = api.py_aa_i2c_read_ext(aardvark, subordinate_addr, flags, num_bytes, data_in)
     # data_in post-processing
     if __data_in: del data_in[max(0, min(num_read, len(data_in))):]
     return (_ret_, data_in, num_read)
 
 
-# Write a stream of bytes to the I2C slave device.
-def aa_i2c_write (aardvark, slave_addr, flags, data_out):
-    """usage: int return = aa_i2c_write(Aardvark aardvark, u16 slave_addr, AardvarkI2cFlags flags, u08[] data_out)
+# Write a stream of bytes to the I2C subordinate device.
+def aa_i2c_write (aardvark, subordinate_addr, flags, data_out):
+    """usage: int return = aa_i2c_write(Aardvark aardvark, u16 subordinate_addr, AardvarkI2cFlags flags, u08[] data_out)
 
     All arrays can be passed into the API as an ArrayType object or as
     a tuple (array, length), where array is an ArrayType object and
@@ -643,15 +643,15 @@ def aa_i2c_write (aardvark, slave_addr, flags, data_out):
     if data_out.typecode != 'B':
         raise TypeError("type for 'data_out' must be array('B')")
     # Call API function
-    return api.py_aa_i2c_write(aardvark, slave_addr, flags, num_bytes, data_out)
+    return api.py_aa_i2c_write(aardvark, subordinate_addr, flags, num_bytes, data_out)
 
 
-# Write a stream of bytes to the I2C slave device.
+# Write a stream of bytes to the I2C subordinate device.
 # This API function returns the number of bytes written into
 # the num_written variable.  The return value of the function
 # is a status code.
-def aa_i2c_write_ext (aardvark, slave_addr, flags, data_out):
-    """usage: (int return, u16 num_written) = aa_i2c_write_ext(Aardvark aardvark, u16 slave_addr, AardvarkI2cFlags flags, u08[] data_out)
+def aa_i2c_write_ext (aardvark, subordinate_addr, flags, data_out):
+    """usage: (int return, u16 num_written) = aa_i2c_write_ext(Aardvark aardvark, u16 subordinate_addr, AardvarkI2cFlags flags, u08[] data_out)
 
     All arrays can be passed into the API as an ArrayType object or as
     a tuple (array, length), where array is an ArrayType object and
@@ -667,18 +667,18 @@ def aa_i2c_write_ext (aardvark, slave_addr, flags, data_out):
     if data_out.typecode != 'B':
         raise TypeError("type for 'data_out' must be array('B')")
     # Call API function
-    return api.py_aa_i2c_write_ext(aardvark, slave_addr, flags, num_bytes, data_out)
+    return api.py_aa_i2c_write_ext(aardvark, subordinate_addr, flags, num_bytes, data_out)
 
 
-# Do an atomic write+read to an I2C slave device by first
-# writing a stream of bytes to the I2C slave device and then
-# reading a stream of bytes back from the same slave device.
+# Do an atomic write+read to an I2C subordinate device by first
+# writing a stream of bytes to the I2C subordinate device and then
+# reading a stream of bytes back from the same subordinate device.
 # This API function returns the number of bytes written into
 # the num_written variable and the number of bytes read into
 # the num_read variable.  The return value of the function is
 # the status given as (read_status << 8) | (write_status).
-def aa_i2c_write_read (aardvark, slave_addr, flags, out_data, in_data):
-    """usage: (int return, u16 num_written, u08[] in_data, u16 num_read) = aa_i2c_write_read(Aardvark aardvark, u16 slave_addr, AardvarkI2cFlags flags, u08[] out_data, u08[] in_data)
+def aa_i2c_write_read (aardvark, subordinate_addr, flags, out_data, in_data):
+    """usage: (int return, u16 num_written, u08[] in_data, u16 num_read) = aa_i2c_write_read(Aardvark aardvark, u16 subordinate_addr, AardvarkI2cFlags flags, u08[] out_data, u08[] in_data)
 
     All arrays can be passed into the API as an ArrayType object or as
     a tuple (array, length), where array is an ArrayType object and
@@ -708,33 +708,33 @@ def aa_i2c_write_read (aardvark, slave_addr, flags, out_data, in_data):
         if in_data.typecode != 'B':
             raise TypeError("type for 'in_data' must be array('B')")
     # Call API function
-    (_ret_, num_written, num_read) = api.py_aa_i2c_write_read(aardvark, slave_addr, flags, out_num_bytes, out_data, in_num_bytes, in_data)
+    (_ret_, num_written, num_read) = api.py_aa_i2c_write_read(aardvark, subordinate_addr, flags, out_num_bytes, out_data, in_num_bytes, in_data)
     # in_data post-processing
     if __in_data: del in_data[max(0, min(num_read, len(in_data))):]
     return (_ret_, num_written, in_data, num_read)
 
 
-# Enable/Disable the Aardvark as an I2C slave device
-def aa_i2c_slave_enable (aardvark, addr, maxTxBytes, maxRxBytes):
-    """usage: int return = aa_i2c_slave_enable(Aardvark aardvark, u08 addr, u16 maxTxBytes, u16 maxRxBytes)"""
+# Enable/Disable the Aardvark as an I2C subordinate device
+def aa_i2c_subordinate_enable (aardvark, addr, maxTxBytes, maxRxBytes):
+    """usage: int return = aa_i2c_subordinate_enable(Aardvark aardvark, u08 addr, u16 maxTxBytes, u16 maxRxBytes)"""
 
     if not AA_LIBRARY_LOADED: return AA_INCOMPATIBLE_LIBRARY
     # Call API function
-    return api.py_aa_i2c_slave_enable(aardvark, addr, maxTxBytes, maxRxBytes)
+    return api.py_aa_i2c_subordinate_enable(aardvark, addr, maxTxBytes, maxRxBytes)
 
 
-def aa_i2c_slave_disable (aardvark):
-    """usage: int return = aa_i2c_slave_disable(Aardvark aardvark)"""
+def aa_i2c_subordinate_disable (aardvark):
+    """usage: int return = aa_i2c_subordinate_disable(Aardvark aardvark)"""
 
     if not AA_LIBRARY_LOADED: return AA_INCOMPATIBLE_LIBRARY
     # Call API function
-    return api.py_aa_i2c_slave_disable(aardvark)
+    return api.py_aa_i2c_subordinate_disable(aardvark)
 
 
-# Set the slave response in the event the Aardvark is put
-# into slave mode and contacted by a Master.
-def aa_i2c_slave_set_response (aardvark, data_out):
-    """usage: int return = aa_i2c_slave_set_response(Aardvark aardvark, u08[] data_out)
+# Set the subordinate response in the event the Aardvark is put
+# into subordinate mode and contacted by a Main.
+def aa_i2c_subordinate_set_response (aardvark, data_out):
+    """usage: int return = aa_i2c_subordinate_set_response(Aardvark aardvark, u08[] data_out)
 
     All arrays can be passed into the API as an ArrayType object or as
     a tuple (array, length), where array is an ArrayType object and
@@ -750,25 +750,25 @@ def aa_i2c_slave_set_response (aardvark, data_out):
     if data_out.typecode != 'B':
         raise TypeError("type for 'data_out' must be array('B')")
     # Call API function
-    return api.py_aa_i2c_slave_set_response(aardvark, num_bytes, data_out)
+    return api.py_aa_i2c_subordinate_set_response(aardvark, num_bytes, data_out)
 
 
 # Return number of bytes written from a previous
-# Aardvark->I2C_master transmission.  Since the transmission is
+# Aardvark->I2C_main transmission.  Since the transmission is
 # happening asynchronously with respect to the PC host
 # software, there could be responses queued up from many
 # previous write transactions.
-def aa_i2c_slave_write_stats (aardvark):
-    """usage: int return = aa_i2c_slave_write_stats(Aardvark aardvark)"""
+def aa_i2c_subordinate_write_stats (aardvark):
+    """usage: int return = aa_i2c_subordinate_write_stats(Aardvark aardvark)"""
 
     if not AA_LIBRARY_LOADED: return AA_INCOMPATIBLE_LIBRARY
     # Call API function
-    return api.py_aa_i2c_slave_write_stats(aardvark)
+    return api.py_aa_i2c_subordinate_write_stats(aardvark)
 
 
-# Read the bytes from an I2C slave reception
-def aa_i2c_slave_read (aardvark, data_in):
-    """usage: (int return, u08 addr, u08[] data_in) = aa_i2c_slave_read(Aardvark aardvark, u08[] data_in)
+# Read the bytes from an I2C subordinate reception
+def aa_i2c_subordinate_read (aardvark, data_in):
+    """usage: (int return, u08 addr, u08[] data_in) = aa_i2c_subordinate_read(Aardvark aardvark, u08[] data_in)
 
     All arrays can be passed into the API as an ArrayType object or as
     a tuple (array, length), where array is an ArrayType object and
@@ -794,23 +794,23 @@ def aa_i2c_slave_read (aardvark, data_in):
         if data_in.typecode != 'B':
             raise TypeError("type for 'data_in' must be array('B')")
     # Call API function
-    (_ret_, addr) = api.py_aa_i2c_slave_read(aardvark, num_bytes, data_in)
+    (_ret_, addr) = api.py_aa_i2c_subordinate_read(aardvark, num_bytes, data_in)
     # data_in post-processing
     if __data_in: del data_in[max(0, min(_ret_, len(data_in))):]
     return (_ret_, addr, data_in)
 
 
 # Extended functions that return status code
-def aa_i2c_slave_write_stats_ext (aardvark):
-    """usage: (int return, u16 num_written) = aa_i2c_slave_write_stats_ext(Aardvark aardvark)"""
+def aa_i2c_subordinate_write_stats_ext (aardvark):
+    """usage: (int return, u16 num_written) = aa_i2c_subordinate_write_stats_ext(Aardvark aardvark)"""
 
     if not AA_LIBRARY_LOADED: return AA_INCOMPATIBLE_LIBRARY
     # Call API function
-    return api.py_aa_i2c_slave_write_stats_ext(aardvark)
+    return api.py_aa_i2c_subordinate_write_stats_ext(aardvark)
 
 
-def aa_i2c_slave_read_ext (aardvark, data_in):
-    """usage: (int return, u08 addr, u08[] data_in, u16 num_read) = aa_i2c_slave_read_ext(Aardvark aardvark, u08[] data_in)
+def aa_i2c_subordinate_read_ext (aardvark, data_in):
+    """usage: (int return, u08 addr, u08[] data_in, u16 num_read) = aa_i2c_subordinate_read_ext(Aardvark aardvark, u08[] data_in)
 
     All arrays can be passed into the API as an ArrayType object or as
     a tuple (array, length), where array is an ArrayType object and
@@ -836,7 +836,7 @@ def aa_i2c_slave_read_ext (aardvark, data_in):
         if data_in.typecode != 'B':
             raise TypeError("type for 'data_in' must be array('B')")
     # Call API function
-    (_ret_, addr, num_read) = api.py_aa_i2c_slave_read_ext(aardvark, num_bytes, data_in)
+    (_ret_, addr, num_read) = api.py_aa_i2c_subordinate_read_ext(aardvark, num_bytes, data_in)
     # data_in post-processing
     if __data_in: del data_in[max(0, min(num_read, len(data_in))):]
     return (_ret_, addr, data_in, num_read)
@@ -960,7 +960,7 @@ AA_SPI_PHASE_SETUP_SAMPLE = 1
 AA_SPI_BITORDER_MSB = 0
 AA_SPI_BITORDER_LSB = 1
 
-# Configure the SPI master or slave interface
+# Configure the SPI main or subordinate interface
 def aa_spi_configure (aardvark, polarity, phase, bitorder):
     """usage: int return = aa_spi_configure(Aardvark aardvark, AardvarkSpiPolarity polarity, AardvarkSpiPhase phase, AardvarkSpiBitorder bitorder)"""
 
@@ -969,7 +969,7 @@ def aa_spi_configure (aardvark, polarity, phase, bitorder):
     return api.py_aa_spi_configure(aardvark, polarity, phase, bitorder)
 
 
-# Write a stream of bytes to the downstream SPI slave device.
+# Write a stream of bytes to the downstream SPI subordinate device.
 def aa_spi_write (aardvark, data_out, data_in):
     """usage: (int return, u08[] data_in) = aa_spi_write(Aardvark aardvark, u08[] data_out, u08[] data_in)
 
@@ -1007,27 +1007,27 @@ def aa_spi_write (aardvark, data_out, data_in):
     return (_ret_, data_in)
 
 
-# Enable/Disable the Aardvark as an SPI slave device
-def aa_spi_slave_enable (aardvark):
-    """usage: int return = aa_spi_slave_enable(Aardvark aardvark)"""
+# Enable/Disable the Aardvark as an SPI subordinate device
+def aa_spi_subordinate_enable (aardvark):
+    """usage: int return = aa_spi_subordinate_enable(Aardvark aardvark)"""
 
     if not AA_LIBRARY_LOADED: return AA_INCOMPATIBLE_LIBRARY
     # Call API function
-    return api.py_aa_spi_slave_enable(aardvark)
+    return api.py_aa_spi_subordinate_enable(aardvark)
 
 
-def aa_spi_slave_disable (aardvark):
-    """usage: int return = aa_spi_slave_disable(Aardvark aardvark)"""
+def aa_spi_subordinate_disable (aardvark):
+    """usage: int return = aa_spi_subordinate_disable(Aardvark aardvark)"""
 
     if not AA_LIBRARY_LOADED: return AA_INCOMPATIBLE_LIBRARY
     # Call API function
-    return api.py_aa_spi_slave_disable(aardvark)
+    return api.py_aa_spi_subordinate_disable(aardvark)
 
 
-# Set the slave response in the event the Aardvark is put
-# into slave mode and contacted by a Master.
-def aa_spi_slave_set_response (aardvark, data_out):
-    """usage: int return = aa_spi_slave_set_response(Aardvark aardvark, u08[] data_out)
+# Set the subordinate response in the event the Aardvark is put
+# into subordinate mode and contacted by a Main.
+def aa_spi_subordinate_set_response (aardvark, data_out):
+    """usage: int return = aa_spi_subordinate_set_response(Aardvark aardvark, u08[] data_out)
 
     All arrays can be passed into the API as an ArrayType object or as
     a tuple (array, length), where array is an ArrayType object and
@@ -1043,12 +1043,12 @@ def aa_spi_slave_set_response (aardvark, data_out):
     if data_out.typecode != 'B':
         raise TypeError("type for 'data_out' must be array('B')")
     # Call API function
-    return api.py_aa_spi_slave_set_response(aardvark, num_bytes, data_out)
+    return api.py_aa_spi_subordinate_set_response(aardvark, num_bytes, data_out)
 
 
-# Read the bytes from an SPI slave reception
-def aa_spi_slave_read (aardvark, data_in):
-    """usage: (int return, u08[] data_in) = aa_spi_slave_read(Aardvark aardvark, u08[] data_in)
+# Read the bytes from an SPI subordinate reception
+def aa_spi_subordinate_read (aardvark, data_in):
+    """usage: (int return, u08[] data_in) = aa_spi_subordinate_read(Aardvark aardvark, u08[] data_in)
 
     All arrays can be passed into the API as an ArrayType object or as
     a tuple (array, length), where array is an ArrayType object and
@@ -1074,7 +1074,7 @@ def aa_spi_slave_read (aardvark, data_in):
         if data_in.typecode != 'B':
             raise TypeError("type for 'data_in' must be array('B')")
     # Call API function
-    (_ret_) = api.py_aa_spi_slave_read(aardvark, num_bytes, data_in)
+    (_ret_) = api.py_aa_spi_subordinate_read(aardvark, num_bytes, data_in)
     # data_in post-processing
     if __data_in: del data_in[max(0, min(_ret_, len(data_in))):]
     return (_ret_, data_in)
@@ -1082,19 +1082,19 @@ def aa_spi_slave_read (aardvark, data_in):
 
 # Change the output polarity on the SS line.
 #
-# Note: When configured as an SPI slave, the Aardvark will
+# Note: When configured as an SPI subordinate, the Aardvark will
 # always be setup with SS as active low.  Hence this function
-# only affects the SPI master functions on the Aardvark.
+# only affects the SPI main functions on the Aardvark.
 # enum AardvarkSpiSSPolarity
 AA_SPI_SS_ACTIVE_LOW  = 0
 AA_SPI_SS_ACTIVE_HIGH = 1
 
-def aa_spi_master_ss_polarity (aardvark, polarity):
-    """usage: int return = aa_spi_master_ss_polarity(Aardvark aardvark, AardvarkSpiSSPolarity polarity)"""
+def aa_spi_main_ss_polarity (aardvark, polarity):
+    """usage: int return = aa_spi_main_ss_polarity(Aardvark aardvark, AardvarkSpiSSPolarity polarity)"""
 
     if not AA_LIBRARY_LOADED: return AA_INCOMPATIBLE_LIBRARY
     # Call API function
-    return api.py_aa_spi_master_ss_polarity(aardvark, polarity)
+    return api.py_aa_spi_main_ss_polarity(aardvark, polarity)
 
 
 

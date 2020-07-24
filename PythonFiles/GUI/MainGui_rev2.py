@@ -10,11 +10,11 @@ import Tkinter as Tk
 #esablish the size of the rootwindow
 
 class CheckButton():
-    def __init__(self, master, text, row = None):
+    def __init__(self, main, text, row = None):
         self.var = Tk.IntVar()
         self.text=text
         c = Tk.Checkbutton(
-            master, activebackground = "red",\
+            main, activebackground = "red",\
             activeforeground = "yellow",\
             bg = "blue",\
             bitmap = None,\
@@ -50,7 +50,7 @@ class MainGui:
  
  
         #create the containers or frames color blue
-        self.frame = Tk.Frame(master = self.root,bg = 'blue', width=500, height=500,\
+        self.frame = Tk.Frame(main = self.root,bg = 'blue', width=500, height=500,\
                               pady = 1)
         self.label = Tk.Label(self.frame,text ="NANO RT")
         self.label.grid(row = 0, sticky = 'n')

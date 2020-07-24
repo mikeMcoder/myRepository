@@ -1158,7 +1158,7 @@ class TestSrqTriggers:
         print it.srqT()
         self.it.statusF(1,1,1,1,1,1,1,1)
         self.it.statusW(1,1,1,1,1,1,1,1) #clear alarms
-        it.resena(mr=1)#trigger master reset
+        it.resena(mr=1)#trigger main reset
         time.sleep(3)
         print "==>> Show the alarm status after laser is tuned while the mrl is on"
         self.monitorParameters()
@@ -1176,7 +1176,7 @@ class TestSrqTriggers:
         print it.srqT()
         self.it.statusF(1,1,1,1,1,1,1,1)
         self.it.statusW(1,1,1,1,1,1,1,1) #clear alarms
-        it.resena(mr=1)#trigger master reset
+        it.resena(mr=1)#trigger main reset
         time.sleep(3)
         print "==>> Show the alarm status after laser is tuned while the mrl is on"
         self.monitorParameters()
@@ -1210,7 +1210,7 @@ class TestSrqTriggers:
         self.it.mcb(sdf=0,adt=1)
         self.it.resena(sena=1)#turn on the laser
         monChannellock()#wiat to chanel lock#monitor until channel lock
-        it.resena(mr=1)#trigger master reset
+        it.resena(mr=1)#trigger main reset
         self.it.srqT(0,0,0,0,0,0,0,0,1,0,0,0,0) #enable crl turn off everything
         print it.srqT()
         time.sleep(3)
@@ -1226,7 +1226,7 @@ class TestSrqTriggers:
         print "Turn on laser"
         self.it.resena(sena=1)#turn on the laser
         monChannellock()#wait to chanel lock#monitor until channel lock
-        it.resena(mr=1)#trigger master reset
+        it.resena(mr=1)#trigger main reset
         time.sleep(3)
         self.it.srqT(0,0,0,0,0,0,0,0,0,0,0,0,0) #enable dis turn off everything
         print it.srqT()
@@ -1804,7 +1804,7 @@ class TestFatalTriggers:
         monChannellock()#wiat to chanel lock#monitor until channel lock
         self.it.statusF(1,1,1,1,1,1,1,1)
         self.it.statusW(1,1,1,1,1,1,1,1) #clear alarms
-        it.resena(mr=1)#trigger master reset
+        it.resena(mr=1)#trigger main reset
         time.sleep(3)
         self.it.fatalT(0,0,0,0,1,0,0,0,0) #enable wtherml turn off everything
         print it.fatalT()
@@ -1822,7 +1822,7 @@ class TestFatalTriggers:
         monChannellock()#wait to chanel lock#monitor until channel lock
         self.it.statusF(1,1,1,1,1,1,1,1)
         self.it.statusW(1,1,1,1,1,1,1,1) #clear alarms
-        it.resena(mr=1)#trigger master reset
+        it.resena(mr=1)#trigger main reset
         time.sleep(3)
         self.it.fatalT(0,0,0,0,0,0,0,0,0) #enable wtherml turn off everything
         print it.fatalT()

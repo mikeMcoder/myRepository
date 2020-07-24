@@ -10,11 +10,11 @@ import Tkinter as Tk
 #esablish the size of the rootwindow
 
 class CheckButton():
-    def __init__(self, master, text):
+    def __init__(self, main, text):
         self.var = Tk.IntVar()
         self.text=text
         c = Tk.Checkbutton(
-            master, text=text,
+            main, text=text,
             variable=self.var,
             command=self.check)
         c.pack()
@@ -38,7 +38,7 @@ class MainGui(CheckB):
         self.root.title("RT GUI")   # add a title to the root window
         self.root.geometry("800x800")
         self.root.resizable(0,0)
-        self.frame = Tk.Frame(master = self.root,width=1000, height=1000, bg='blue')
+        self.frame = Tk.Frame(main = self.root,width=1000, height=1000, bg='blue')
         self.addCheckbutton()
         self.frame.pack()
  # this is where you put the dimension of the frame

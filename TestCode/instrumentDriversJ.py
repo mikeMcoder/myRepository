@@ -153,7 +153,7 @@ class pmHP8163:
         return float(self.inst.ask(cmd))
 
     def triggerReadPower(self):
-        #trigger must be done on the master channel, number 1.  It will also affect slave channel.
+        #trigger must be done on the main channel, number 1.  It will also affect subordinate channel.
         #this is why the trigger is hard coded to be channel 1.
         self.inst.write( ':INIT%d:CHAN1:TRIG:IMM' % self.slot)
         strCmd = 'FETC%d:CHAN%d:POW?'%(self.slot, self.head)

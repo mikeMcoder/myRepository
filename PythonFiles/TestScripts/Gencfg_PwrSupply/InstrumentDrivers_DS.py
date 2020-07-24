@@ -819,7 +819,7 @@ class Agilent8163B(Base):
 
 
     def getDisplayedPower(self, queryDelay = 0.002):
-        #getPower() will not work for the slave module, so we need to read the display with FETCH
+        #getPower() will not work for the subordinate module, so we need to read the display with FETCH
         cmd = 'FETC%d:CHAN%d:POW?'%(self._conf[self._ActiveConf][0],self._conf[self._ActiveConf][1])
         reply = self.query(cmd, delay=queryDelay)
         try:
@@ -877,7 +877,7 @@ class Agilent8163B(Base):
 
     #<DS>
     def triggerReadPower(self, fltQueryDelay = 0.05):
-        #trigger must be done on the master channel, number 1.  It will also affect slave channel.
+        #trigger must be done on the main channel, number 1.  It will also affect subordinate channel.
         #this is why the trigger is hard coded to be channel 1.
         self.write( ':INIT%d:CHAN1:TRIG:IMM' % self.getSlot())
         strCmd = 'FETC%d:CHAN%d:POW?'%(self.getSlot(),self.getHead())

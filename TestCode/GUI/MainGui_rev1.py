@@ -10,11 +10,11 @@ import Tkinter as Tk
 #esablish the size of the rootwindow
 
 class CheckButton():
-    def __init__(self, master, text):
+    def __init__(self, main, text):
         self.var = Tk.IntVar()
         self.text=text
         c = Tk.Checkbutton(
-            master, text=text,
+            main, text=text,
             variable=self.var,
             command=self.check)
         #c.pack()
@@ -42,7 +42,7 @@ class MainGui:
         self.root.grid_columnconfigure(0, weight = 
         
         #create the containers or frames color blue
-        self.frame = Tk.Frame(master = self.root,bg = 'blue', width=100, height=100,\
+        self.frame = Tk.Frame(main = self.root,bg = 'blue', width=100, height=100,\
                               pady = 1)
        
         #assign a location for this frame

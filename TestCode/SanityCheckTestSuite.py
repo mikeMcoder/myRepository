@@ -200,13 +200,13 @@ class SanityCheck:
             raise'FAILED'
 
 
-    def masterResettest(self):
+    def mainResettest(self):
         
         try:
             
             it.connect(com_port,baud)
             it.logging(True)
-            print '*' * 10,  'TEST: MasterResettest', '*' * 10
+            print '*' * 10,  'TEST: MainResettest', '*' * 10
                 #Verify hard reset
             for chn in [1,5,15,35,45,55,65,75,85]:
                 it.resena(0)
@@ -224,7 +224,7 @@ class SanityCheck:
                 turnOnLaser()
                 checkAlarms()
             it.disconnect()
-            print 'MasterReset Test Done...'
+            print 'MainReset Test Done...'
             
         except(IOError,ValueError):
             raise'FAILED'
@@ -596,8 +596,8 @@ class SanityCheck:
 
 
 
-    ##While laser on , send resena(sena=1, sr=0  ,mr=1)	Master Reset Triggered
-            print '*' * 10,'While laser on , send resena(sena=1, sr=0  ,mr=1)	Master Reset Triggered','*' * 10
+    ##While laser on , send resena(sena=1, sr=0  ,mr=1)	Main Reset Triggered
+            print '*' * 10,'While laser on , send resena(sena=1, sr=0  ,mr=1)	Main Reset Triggered','*' * 10
             print it.resena(1)
             addMarkers()
             print 'Clear Alarms...'
@@ -630,8 +630,8 @@ class SanityCheck:
 
 
             
-    ##While laser on , send resena(sr=0  ,mr=1)	Master Reset Triggered
-            print '*' * 10,'While laser on , send resena(sr=0  ,mr=1)	Master Reset Triggered','*' * 10
+    ##While laser on , send resena(sr=0  ,mr=1)	Main Reset Triggered
+            print '*' * 10,'While laser on , send resena(sr=0  ,mr=1)	Main Reset Triggered','*' * 10
             print it.resena(1)
             clearAlarms()
             pendingClear()
@@ -647,8 +647,8 @@ class SanityCheck:
             checkAlarms()
             it.oop()
             
-    ##While laser on , send resena(sr=1  ,mr=0)	Master Reset Triggered
-            print '*' * 10,'While laser on , send resena(sr=1  ,mr=0)	Master Reset Triggered','*' * 10
+    ##While laser on , send resena(sr=1  ,mr=0)	Main Reset Triggered
+            print '*' * 10,'While laser on , send resena(sr=1  ,mr=0)	Main Reset Triggered','*' * 10
             print it.resena(1)
             clearAlarms()
             pendingClear()
@@ -664,8 +664,8 @@ class SanityCheck:
             checkAlarms()
             it.oop()
             
-    ##While laser on , send resena(sr=1  ,mr=1)	Master Reset Triggered
-            print '*' * 10,'While laser on , send resena(sr=1  ,mr=1)	Master Reset Triggered','*' * 10
+    ##While laser on , send resena(sr=1  ,mr=1)	Main Reset Triggered
+            print '*' * 10,'While laser on , send resena(sr=1  ,mr=1)	Main Reset Triggered','*' * 10
             print it.resena(1)
             clearAlarms()
             pendingClear()
@@ -705,8 +705,8 @@ class SanityCheck:
             checkAlarms()
             it.oop()
             
-    ##While laser is off, send resena(sena=1, sr=0,  mr = 1)	Master Reset Triggered
-            print '*' * 10,'While laser is off, send resena(sena=1, sr=0,  mr = 1)	Master Reset Triggered','*' * 10
+    ##While laser is off, send resena(sena=1, sr=0,  mr = 1)	Main Reset Triggered
+            print '*' * 10,'While laser is off, send resena(sena=1, sr=0,  mr = 1)	Main Reset Triggered','*' * 10
             it.resena(0)
             print it.resena(sena=1,sr=0,mr=1)
             if unitType == 'dual':
@@ -721,8 +721,8 @@ class SanityCheck:
             it.oop()
 
 
-    ##While laser is off, send resena(sr=0,  mr = 1)	Master Reset Triggered
-            print '*' * 10,'While laser is off, send resena(sr=0,  mr = 1)	Master Reset Triggered','*' * 10
+    ##While laser is off, send resena(sr=0,  mr = 1)	Main Reset Triggered
+            print '*' * 10,'While laser is off, send resena(sr=0,  mr = 1)	Main Reset Triggered','*' * 10
             it.resena(0)
             print it.resena(sena=0,sr=0,mr=1)
             if unitType == 'dual':
@@ -737,8 +737,8 @@ class SanityCheck:
             it.oop()
 
 
-    ##While laser is off, send resena(sr=1,  mr = 0)	Master Reset Triggered
-            print '*' * 10,'While laser is off, send resena(sr=1,  mr = 0)	Master Reset Triggered','*' * 10
+    ##While laser is off, send resena(sr=1,  mr = 0)	Main Reset Triggered
+            print '*' * 10,'While laser is off, send resena(sr=1,  mr = 0)	Main Reset Triggered','*' * 10
             it.resena(0)
             print it.resena(sena=0,sr=1,mr=0)
             if unitType == 'dual':
@@ -753,8 +753,8 @@ class SanityCheck:
             it.oop()
 
 
-    ##While laser is off, send resena(sr=1,  mr = 1)	Master Reset Triggered
-            print '*' * 10,'While laser is off, send resena(sr=1,  mr = 1)	Master Reset Triggered','*' * 10
+    ##While laser is off, send resena(sr=1,  mr = 1)	Main Reset Triggered
+            print '*' * 10,'While laser is off, send resena(sr=1,  mr = 1)	Main Reset Triggered','*' * 10
             it.resena(0)
             print it.resena(sena=0,sr=1,mr=1)
             if unitType == 'dual':
@@ -1117,7 +1117,7 @@ if __name__== '__main__':
 ##        raise
         
     try:
-        SanityCheck().masterResettest()
+        SanityCheck().mainResettest()
     except:
         raise
         

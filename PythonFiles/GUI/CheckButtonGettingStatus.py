@@ -14,11 +14,11 @@ import Tkinter
 root=Tk()
 
 class CheckB():
-    def __init__(self, master, text):
+    def __init__(self, main, text):
         self.var = IntVar()
         self.text=text
         c = Checkbutton(
-            master, text=text,
+            main, text=text,
             variable=self.var,
             command=self.check)
         c.pack()

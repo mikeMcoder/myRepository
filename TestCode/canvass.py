@@ -5,7 +5,7 @@ from constants import DELAY,DB_PATH
 def update_data_for_cod_bod():
     conn = sqlite3.connect('ubiqx_db.db')
     c = conn.cursor()
-    execute_query = c.execute('''select cod,bod,tss from front_end_data where slave_id=1''')
+    execute_query = c.execute('''select cod,bod,tss from front_end_data where subordinate_id=1''')
     result_set = c.fetchall()
 
     data_for_cod = 0
